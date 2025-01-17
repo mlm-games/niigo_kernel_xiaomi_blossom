@@ -243,17 +243,24 @@ static void ff_ctl_device_event(struct work_struct *ws)
 static irqreturn_t ff_ctl_device_irq(int irq, void *dev_id)
 {
     ff_ctl_context_t *ctx = (ff_ctl_context_t *)dev_id;
+    FF_LOGI("[ame dbg] di 1");
     disable_irq_nosync(irq);
+    FF_LOGI("[ame dbg] di 2");
 
     if (likely(irq == ctx->irq_num)) {
+        FF_LOGI("[ame dbg] di 3 irqn");
         if (g_config && g_config->enable_fasync && g_context->async_queue) {
+            FF_LOGI("[ame dbg] di 3 1 fasync");
             kill_fasync(&g_context->async_queue, SIGIO, POLL_IN);
         } else {
+            FF_LOGI("[ame dbg] di 3 2 schedq");
             schedule_work(&ctx->work_queue);
         }
     }
 
+    FF_LOGI("[ame dbg] di 4");
     enable_irq(irq);
+    FF_LOGI("[ame dbg] di 5");
     return IRQ_HANDLED;
 }
 
@@ -429,9 +436,11 @@ static int ff_ctl_init_driver(void)
             break;
         }
 
+	FF_LOGI("[ame dbg] cp 1");
         /* Register IRQ. */
         err = request_irq(g_context->irq_num, ff_ctl_device_irq,
                 IRQF_TRIGGER_RISING | IRQF_ONESHOT, "ff_irq", (void*)g_context);
+	FF_LOGI("[ame dbg] cp 2");
         if (err) {
             FF_LOGE("request_irq(..) = %d.", err);
             if(g_context->irq_num > 0){
@@ -439,12 +448,14 @@ static int ff_ctl_init_driver(void)
             }
             break;
         }
+	FF_LOGI("[ame dbg] cp 3");
 
         /* Wake up the system while receiving the interrupt. */
         err = enable_irq_wake(g_context->irq_num);
         if (err) {
             FF_LOGE("enable_irq_wake(%d) = %d.", g_context->irq_num, err);
         }
+	FF_LOGI("[ame dbg] cp 4");
 
         /* Register spidev device. For REE-Emulation solution only. */
 //        if (g_config && g_config->enable_spidev) {
