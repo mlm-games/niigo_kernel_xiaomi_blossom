@@ -11,6 +11,22 @@ on:
       - '**'   # Matches all branches
     paths-ignore:
       - 'README.md'
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Tag name'
+        required: true
+        default: '1.8.0'
+      upload_releases:
+        description: 'Upload releases'
+        required: true
+        default: 'true'
+        type: boolean
+      mark_prerelease:
+        description: 'Mark as prerelease'
+        required: true
+        default: 'false'
+        type: boolean
   
 jobs:
   build:
