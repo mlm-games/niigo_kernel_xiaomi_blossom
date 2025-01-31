@@ -28,7 +28,7 @@ jobs:
         ENABLE_CCACHE: 'true'
         MAKE_ARGS: 'O=out PATH=$HOME/clang/bin:$PATH CC="ccache clang" CLANG_TRIPLE=aarch64-linux-gnu- CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_ARM32=arm-linux-gnueabi-'
         ENABLE_KSU: true
-        KPROBE_ONLY: true
+        KSU_KPROBE_ONLY: true
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
