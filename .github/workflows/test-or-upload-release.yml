@@ -11,9 +11,17 @@ on:
       - '**'   # Matches all branches
     paths-ignore:
       - 'README.md'
+  
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    # strategy:
+    #   fail-fast: false
+    #   max-parallel: 2   
+    #   matrix:
+    #     ksu: [true, false]
     
     steps:
     - name: Checkout repository
@@ -27,8 +35,8 @@ jobs:
         TOOLCHAIN_CLONE_CMD: 'mkdir -p $HOME/clang && wget https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/master/clang-r530567.tar.gz -O clang.tar.gz && tar xf clang.tar.gz -C $HOME/clang && sudo apt install gcc-aarch64-linux-gnu gcc-arm-linux-gnueabi'
         ENABLE_CCACHE: 'true'
         MAKE_ARGS: 'O=out PATH=$HOME/clang/bin:$PATH CC="ccache clang" CLANG_TRIPLE=aarch64-linux-gnu- CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_ARM32=arm-linux-gnueabi-'
-        # ENABLE_KSU: true
-        # KSU_KPROBE_ONLY: true
+        # ENABLE_KSU: ${{ matrix.ksu }}
+        # KSU_KPROBE_ONLY: ${{matrix.ksu }}
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
