@@ -70,4 +70,6 @@ jobs:
         tag_name: ${{ inputs.tag_name }}
         body: |
           Flash using custom recovery or Kernel Flasher Apps from F-Droid
+
+          For KSU, use backslashxx or KernelSU-Next's KernelSU apk
         prerelease: ${{ inputs.mark_prerelease }}
